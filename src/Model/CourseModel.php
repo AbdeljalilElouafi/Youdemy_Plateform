@@ -100,4 +100,23 @@ class CourseModel extends BaseModel {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$courseId, $studentId]);
     }
+
+    public function getAvailableCourses($studentId) {
+        $sql = "SELECT c.* 
+                FROM courses c 
+                WHERE c.status = 'published' 
+                AND c.id NOT IN (
+                    SELECT course_id FROM enrollments WHERE student_id = ?
+                )";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$studentId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    
+    public function getCourseById($id) {
+        $sql = "SELECT * FROM courses WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
 }
