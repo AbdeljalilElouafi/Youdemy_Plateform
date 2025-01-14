@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: ../../public/index.php');
             exit;
         }
-        
+         
         $error = 'Invalid credentials';
     } elseif (isset($_POST['reg-email'])) {
         // Registration process
