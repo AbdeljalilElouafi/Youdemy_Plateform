@@ -10,7 +10,7 @@ $userModel = new UserModel();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        // Login process
+
         $user = $userModel->authenticate($_POST['email'], $_POST['password']);
         
         if ($user) {
@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          
         $error = 'Invalid credentials';
     } elseif (isset($_POST['reg-email'])) {
-        // Registration process
         $result = $userModel->register([
             'email' => $_POST['reg-email'],
             'password' => $_POST['reg-password'],

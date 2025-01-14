@@ -10,7 +10,6 @@ class Database {
     private $connection = null;
 
     private function __construct() {
-        // Load environment variables
         $dotenv = Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->load();
 
@@ -37,9 +36,8 @@ class Database {
         return self::$instance->connection;
     }
 
-    // Prevent cloning of the instance
+
     private function __clone() {}
 
-    // Changed to public as required by PHP
     public function __wakeup() {}
 }
