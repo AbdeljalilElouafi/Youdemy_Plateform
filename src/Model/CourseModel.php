@@ -61,7 +61,7 @@ class CourseModel extends BaseModel {
     public function deleteCourse($id) {
         return $this->deleteRecord($this->table, $id);
     }
-
+ 
     public function getTeacherCourses($teacherId, $page = 1, $limit = 20) {
         $offset = ($page - 1) * $limit;
         $sql = "SELECT * FROM {$this->table} WHERE teacher_id = ? LIMIT ? OFFSET ?";
