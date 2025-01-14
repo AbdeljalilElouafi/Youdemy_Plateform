@@ -26,7 +26,7 @@ abstract class BaseModel {
             return false;
         }
     }
-
+ 
     protected function updateRecord($table, $data, $id) {
         try {
             $args = array();
