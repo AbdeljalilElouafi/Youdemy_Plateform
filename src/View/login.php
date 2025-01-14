@@ -7,12 +7,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body class="bg-indigo-100">
+<body class="bg-gray-300">
     <div class="min-h-screen flex flex-col justify-center px-6 py-12 lg:px-8">
         <!-- Container for both forms -->
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img class="mx-auto h-24 w-auto transition-all duration-500" src="../assets/img/Udemy-New.png" alt="udemy">
-
+                <div class="flex justify-center">
+                    <h1 class="text-2xl font-bold text-indigo-600">Youdemy</h1>
+                </div>
             <div class="mt-10 flex justify-center space-x-4">
                 <button onclick="showLogin()" id="loginTab" class="text-lg font-semibold text-indigo-600 pb-2 border-b-2 border-indigo-600">Sign In</button>
                 <button onclick="showRegister()" id="registerTab" class="text-lg font-semibold text-gray-500 pb-2 border-b-2 border-transparent">Register</button>
@@ -46,6 +47,15 @@
                                    transition duration-200">
                         Sign in
                     </button>
+                </div>
+
+                <div>
+                <a href="../View/landing-page.php"
+                            class="w-full rounded-lg bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm 
+                                   hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 
+                                   transition duration-200">
+                        Return
+                </a>
                 </div>
             </form>
         </div>
@@ -97,6 +107,14 @@
                                    transition duration-200">
                         Create Account
                     </button>
+                </div>
+                <div>
+                <a href="../View/landing-page.php"
+                            class="w-full rounded-lg bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm 
+                                   hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 
+                                   transition duration-200">
+                        Return
+                </a>
                 </div>
             </form>
         </div>
