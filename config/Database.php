@@ -1,15 +1,19 @@
 <?php
-
 namespace Config;
 
 use PDO;
 use PDOException;
+use Dotenv\Dotenv;
 
 class Database {
     private static $instance = null;
     private $connection = null;
 
     private function __construct() {
+        // Load environment variables
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
+
         try {
             $this->connection = new PDO(
                 "mysql:host=" . $_ENV['HOST'] . ";dbname=" . $_ENV['DATABASE'],
@@ -36,6 +40,6 @@ class Database {
     // Prevent cloning of the instance
     private function __clone() {}
 
-    // Prevent unserialize
-    private function __wakeup() {}
+    // Changed to public as required by PHP
+    public function __wakeup() {}
 }
