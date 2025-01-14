@@ -212,4 +212,117 @@ class CourseModel extends BaseModel {
         $stmt->execute([$courseId]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function searchCourses($searchTerm = '', $page = 1, $limit = 6, $categoryId = null) {
+        $offset = ($page - 1) * $limit;
+        
+        $sql = "SELECT c.*, u.first_name, u.last_name, cat.name as category_name,
+                GROUP_CONCAT(t.name) as tags
+                FROM {$this->table} c
+                LEFT JOIN users u ON c.teacher_id = u.id
+                LEFT JOIN categories cat ON c.category_id = cat.id
+                LEFT JOIN course_tags ct ON c.id = ct.course_id
+                LEFT JOIN tags t ON ct.tag_id = t.id
+                WHERE c.status = 'published'";
+        
+        $params = [];
+        
+        if ($searchTerm) {
+            $sql .= " AND (c.title LIKE ? OR c.description LIKE ? OR t.name LIKE ?)";
+            $searchPattern = "%{$searchTerm}%";
+            $params = array_merge($params, [$searchPattern, $searchPattern, $searchPattern]);
+        }
+        
+        if ($categoryId) {
+            $sql .= " AND c.category_id = ?";
+            $params[] = $categoryId;
+        }
+        
+        $sql .= " GROUP BY c.id LIMIT ? OFFSET ?";
+        $params[] = $limit;
+        $params[] = $offset;
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in searchCourses: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getAvailableCoursesForStudent($studentId, $searchTerm = '', $page = 1, $limit = 6, $categoryId = null) {
+        $offset = ($page - 1) * $limit;
+        
+        $sql = "SELECT c.*, u.first_name, u.last_name, cat.name as category_name,
+                GROUP_CONCAT(t.name) as tags
+                FROM {$this->table} c
+                LEFT JOIN users u ON c.teacher_id = u.id
+                LEFT JOIN categories cat ON c.category_id = cat.id
+                LEFT JOIN course_tags ct ON c.id = ct.course_id
+                LEFT JOIN tags t ON ct.tag_id = t.id
+                WHERE c.status = 'published'
+                AND c.id NOT IN (
+                    SELECT course_id FROM enrollments WHERE student_id = ?
+                )";
+        
+        $params = [$studentId];
+        
+        if ($searchTerm) {
+            $sql .= " AND (c.title LIKE ? OR c.description LIKE ? OR t.name LIKE ?)";
+            $searchPattern = "%{$searchTerm}%";
+            $params = array_merge($params, [$searchPattern, $searchPattern, $searchPattern]);
+        }
+        
+        if ($categoryId) {
+            $sql .= " AND c.category_id = ?";
+            $params[] = $categoryId;
+        }
+        
+        $sql .= " GROUP BY c.id LIMIT ? OFFSET ?";
+        $params[] = $limit;
+        $params[] = $offset;
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in getAvailableCoursesForStudent: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getEnrolledCoursesForStudent($studentId, $searchTerm = '', $page = 1, $limit = 6) {
+        $offset = ($page - 1) * $limit;
+        
+        $sql = "SELECT c.*, e.status as enrollment_status, e.enrolled_at,
+                e.progress_percentage, u.first_name, u.last_name
+                FROM courses c
+                JOIN enrollments e ON c.id = e.course_id
+                LEFT JOIN users u ON c.teacher_id = u.id
+                WHERE e.student_id = ?";
+        
+        $params = [$studentId];
+        
+        if ($searchTerm) {
+            $sql .= " AND (c.title LIKE ? OR c.description LIKE ?)";
+            $searchPattern = "%{$searchTerm}%";
+            $params = array_merge($params, [$searchPattern, $searchPattern]);
+        }
+        
+        $sql .= " ORDER BY e.enrolled_at DESC LIMIT ? OFFSET ?";
+        $params[] = $limit;
+        $params[] = $offset;
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in getEnrolledCoursesForStudent: " . $e->getMessage());
+            return [];
+        }
+    }
 }

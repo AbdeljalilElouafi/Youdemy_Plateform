@@ -27,7 +27,7 @@ $totalPages = ceil($totalCourses / $limit);
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-indigo-600">Youdemy</a>
+                    <a href="landing-page.php" class="text-2xl font-bold text-indigo-600">Youdemy</a>
                 </div>
                 <div class="flex items-center">
                     <a href="../pages/login.php" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Login</a>
@@ -44,11 +44,24 @@ $totalPages = ceil($totalCourses / $limit);
                 <p class="text-xl mb-8">Discover the best online courses and start learning today</p>
                 
                 <!-- Search Form -->
-                <form action="/" method="GET" class="max-w-2xl mx-auto">
+                <form action="" method="GET" class="max-w-2xl mx-auto">
                     <div class="flex gap-2">
-                        <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" 
+                        <input type="text" name="search" value="<?= htmlspecialchars($search ?? '') ?>"
                                class="w-full px-4 py-2 rounded-md text-gray-900" 
                                placeholder="Search courses...">
+
+                               <div>
+                    <select name="category" class="w-full bg-gray-600 px-4 py-2 rounded-md">
+                        <option value="">Categories</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?= $category['id'] ?>"
+                                    <?= ($selectedCategory ?? '') == $category['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($category['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
                         <button type="submit" class="bg-indigo-500 px-6 py-2 rounded-md hover:bg-indigo-600">
                             Search
                         </button>
@@ -57,7 +70,7 @@ $totalPages = ceil($totalCourses / $limit);
             </div>
         </div>
     </div>
-
+ 
     <!-- Course Catalog -->
     <div class="max-w-7xl mx-auto px-4 py-12">
         <h2 class="text-3xl font-bold mb-8">Available Courses</h2>

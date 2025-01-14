@@ -24,7 +24,35 @@
         </div>
     </nav>
 
+
+
     <div class="max-w-7xl mx-auto px-4 py-8">
+
+            <!-- Search section -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <form action="" method="GET" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
+                    <input type="text" name="search" value="<?= htmlspecialchars($search ?? '') ?>"
+                           class="w-full px-4 py-2 border rounded-md"
+                           placeholder="Search in your courses...">
+                </div>
+                <div>
+                    <select name="view" class="w-full px-4 py-2 border rounded-md">
+                        <option value="all" <?= ($view ?? '') == 'all' ? 'selected' : '' ?>>All Courses</option>
+                        <option value="enrolled" <?= ($view ?? '') == 'enrolled' ? 'selected' : '' ?>>My Courses</option>
+                        <option value="available" <?= ($view ?? '') == 'available' ? 'selected' : '' ?>>Available Courses</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+     </div>
+
         <!-- My Courses Section -->
         <div class="mb-12">
             <h2 class="text-2xl font-bold mb-6">My Courses</h2>
@@ -70,6 +98,19 @@
                 <?php endforeach; ?>
             </div>
         </div>
+
+                <!-- Pagination -->
+                <?php if ($totalPages > 1): ?>
+        <div class="flex justify-center mt-8 gap-2">
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <a href="/Youdemy_Plateform/src/pages/student-page.php?page=<?= $i ?><?= $search ? '&search=' . urlencode($search) : '' ?>" 
+                  class="<?= $page === $i ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600' ?> 
+                         px-4 py-2 rounded-md hover:bg-indigo-700 hover:text-white">
+                    <?= $i ?>
+                </a>
+            <?php endfor; ?>
+        </div>
+        <?php endif; ?>
     </div>
 </body>
 </html>
