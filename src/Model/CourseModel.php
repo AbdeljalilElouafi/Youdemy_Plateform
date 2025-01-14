@@ -49,4 +49,55 @@ class CourseModel extends BaseModel {
             return 0;
         }
     }
+
+    public function createCourse($data) {
+        return $this->insertRecord($this->table, $data);
+    }
+
+    public function updateCourse($id, $data) {
+        return $this->updateRecord($this->table, $data, $id);
+    }
+
+    public function deleteCourse($id) {
+        return $this->deleteRecord($this->table, $id);
+    }
+
+    public function getTeacherCourses($teacherId, $page = 1, $limit = 10) {
+        $offset = ($page - 1) * $limit;
+        $sql = "SELECT * FROM {$this->table} WHERE teacher_id = ? LIMIT ? OFFSET ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$teacherId, $limit, $offset]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getCourseStatistics($teacherId) {
+        $sql = "SELECT 
+                    c.id,
+                    c.title,
+                    COUNT(DISTINCT e.student_id) as student_count,
+                    COUNT(CASE WHEN e.status = 'completed' THEN 1 END) as completed_count
+                FROM courses c
+                LEFT JOIN enrollments e ON c.id = e.course_id
+                WHERE c.teacher_id = ?
+                GROUP BY c.id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$teacherId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getStudentCourses($studentId) {
+        $sql = "SELECT c.*, e.status as enrollment_status, e.enrolled_at
+                FROM courses c
+                JOIN enrollments e ON c.id = e.course_id
+                WHERE e.student_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$studentId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function enrollStudent($courseId, $studentId) {
+        $sql = "INSERT INTO enrollments (course_id, student_id) VALUES (?, ?)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$courseId, $studentId]);
+    }
 }

@@ -34,4 +34,28 @@ class UserModel extends AbstractModel {
         );
         return $stmt->execute(['id' => $userId]);
     }
+
+
+    public function checkAuth() {
+            if (!isset($_SESSION['user'])) {
+                header('Location: /login.php');
+                exit;
+            }
+        }
+
+    public function checkTeacherRole() {
+            checkAuth();
+            if ($_SESSION['user']['role'] !== 'teacher') {
+                header('Location: /');
+                exit;
+            }
+        }
+
+    public function checkStudentRole() {
+            checkAuth();
+            if ($_SESSION['user']['role'] !== 'student') {
+                header('Location: /');
+                exit;
+            }
+        }
 }

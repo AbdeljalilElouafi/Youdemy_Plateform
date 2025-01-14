@@ -21,9 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'first_name' => $user['first_name'],
                 'last_name' => $user['last_name']
             ];
-            header('Location: ../../public/index.php');
-            exit;
-        }
+
+            if ($user['role'] === 'teacher') {
+                header('Location: ../pages/teacher-page.php');
+            } else if ($user['role'] === 'student') {
+                header('Location: ../pages/student-page.php');
+            } else {
+                header('Location: ../../public/index.php');    }
+                    exit;
+            }
          
         $error = 'Invalid credentials';
     } elseif (isset($_POST['reg-email'])) {
