@@ -18,7 +18,7 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-gray-600">Welcome, <?= htmlspecialchars($_SESSION['user']['first_name']) ?></span>
-                    <a href="../pages/logout.php" class="text-red-600 hover:text-red-800">Logout</a>
+                    <a href="../../pages/logout.php" class="text-red-600 hover:text-red-800">Logout</a>
                 </div>
             </div>
         </div>

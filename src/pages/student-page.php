@@ -16,5 +16,5 @@ $enrolledCourses = $courseModel->getStudentCourses($_SESSION['user']['id']);
 $availableCourses = $courseModel->getAvailableCourses($_SESSION['user']['id']);
 
 
-require_once __DIR__ . '/../View/student-page.php';
+require_once __DIR__ . '/../View/student/student-page.php';
 ?>

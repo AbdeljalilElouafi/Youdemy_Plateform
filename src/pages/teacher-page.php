@@ -15,5 +15,5 @@ $statistics = $courseModel->getCourseStatistics($_SESSION['user']['id']);
 $courses = $courseModel->getTeacherCourses($_SESSION['user']['id']);
 
 
-require_once __DIR__ . '/../View/teacher-page.php';
+require_once __DIR__ . '/../View/teacher/teacher-page.php';
 ?>
