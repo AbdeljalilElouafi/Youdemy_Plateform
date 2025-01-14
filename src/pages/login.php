@@ -7,7 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-indigo-100">
     <div class="min-h-screen flex flex-col justify-center px-6 py-12 lg:px-8">
         <!-- Container for both forms -->
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -42,7 +42,7 @@
                 <div>
                     <button type="submit" 
                             class="w-full rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm 
-                                   hover:bg-indigo-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 
+                                   hover:bg-indigo-900 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 
                                    transition duration-200">
                         Sign in
                     </button>
