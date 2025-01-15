@@ -7,7 +7,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
     exit;
 }
 
-$courseModel = new \App\Model\CourseModel();
+$courseModel = new \App\Model\VideoCourse();
 $categoryModel = new \App\Model\CategoryModel();
 
 // Get search parameters

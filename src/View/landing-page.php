@@ -3,7 +3,8 @@
 require_once '../../vendor/autoload.php';
 use App\Model\CourseModel;
 
-$courseModel = new CourseModel();
+$courseModel = new \App\Model\VideoCourse();
+// $courseModel = new CourseModel();
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 6; 
 $search = isset($_GET['search']) ? $_GET['search'] : '';

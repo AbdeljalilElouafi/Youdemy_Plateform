@@ -2,7 +2,7 @@
 session_start();
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use App\Model\CourseModel;
+use App\Model\VideoCourse;
 
 
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
@@ -10,7 +10,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
     exit;
 }
 
-$courseModel = new CourseModel();
+$courseModel = new VideoCourse();
 $statistics = $courseModel->getCourseStatistics($_SESSION['user']['id']);
 $courses = $courseModel->getTeacherCourses($_SESSION['user']['id']);
 

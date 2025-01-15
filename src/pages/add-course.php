@@ -8,67 +8,54 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
 }
 
 $error = '';
-$success = '';
 
 
-$courseModel = new \App\Model\CourseModel();
+
 $categoryModel = new \App\Model\CategoryModel();
 $tagModel = new \App\Model\TagModel();
-
 
 $categories = $categoryModel->getAllCategories();
 $tags = $tagModel->getAllTags();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $contentUrl = '';
-        $contentType = $_POST['content_type'];
+
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $courseData = [
+            'title' => $_POST['title'],
+            'description' => $_POST['description'],
+            'teacher_id' => $_SESSION['user']['id'],
+            'category_id' => $_POST['category'],
+            'status' => 'draft'
+        ];
+
+
+        $tagIds = $_POST['tags'] ?? [];
+
+
+        $courseType = $_POST['content_type']; 
         
-        if ($contentType === 'document') {
-            if (isset($_FILES['document_file']) && $_FILES['document_file']['error'] === UPLOAD_ERR_OK) {
-                $allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                if (!in_array($_FILES['document_file']['type'], $allowedTypes)) {
-                    throw new Exception('Invalid file type. Only PDF and Word documents are allowed.');
-                }
-                
-                $uploadDir = __DIR__ . '/../../public/uploads/documents/';
-                $fileName = uniqid() . '_' . basename($_FILES['document_file']['name']);
-                $contentUrl = '/uploads/documents/' . $fileName;
-                
-                if (!move_uploaded_file($_FILES['document_file']['file'], $uploadDir . $fileName)) {
-                    throw new Exception('Failed to upload file.');
-                }
-            }
+        if ($courseType === 'video') {
+            $courseData['video_url'] = $_POST['video_url'];
         } else {
-            $contentUrl = $_POST['video_url'];
+            $courseData['content'] = $_POST['content'];
         }
 
 
-        $courseData = [
-            'teacher_id' => $_SESSION['user']['id'],
-            'title' => $_POST['title'],
-            'description' => $_POST['description'],
-            'category_id' => $_POST['category'],
-            'status' => $_POST['status'],
-            'content' => [
-                'type' => $contentType,
-                'url' => $contentUrl,
-                'duration' => $contentType === 'video' ? $_POST['video_duration'] : null,
-                'file_size' => $contentType === 'document' ? $_FILES['document_file']['size'] : null
-            ]
-        ];
+        $course = \App\Model\CourseFactory::createCourse($courseType);
+        
 
-        // Get selected tags
-        $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
+        $courseId = $course->addContent($courseData, $tagIds);
 
-        if ($courseModel->createCourseWithContent($courseData, $selectedTags)) {
+        if ($courseId) {
+            $_SESSION['success'] = 'Course created successfully!';
             header('Location: teacher-page.php');
             exit;
         }
-    } catch (Exception $e) {
-        $error = $e->getMessage();
     }
+} catch (Exception $e) {
+    $error = $e->getMessage();
 }
 
+
 require_once __DIR__ . '/../View/teacher/add-course.php';
-?>

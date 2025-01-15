@@ -19,7 +19,7 @@
                 </div>
             <?php endif; ?>
 
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
                 <div class="space-y-6">
                     <div>
                         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
@@ -43,32 +43,30 @@
                                 <label for="type_video">Video</label>
                             </div>
                             <div>
-                                <input type="radio" id="type_document" name="content_type" value="document"
+                                <input type="radio" id="type_document" name="content_type" value="text"
                                        onchange="toggleContentType()"
                                        class="mr-2">
-                                <label for="type_document">Document</label>
+                                <label for="type_document">Text</label>
                             </div>
                         </div>
                     </div>
 
                     <div id="video_content" class="space-y-4">
-                        <div>
-                            <label for="video_url" class="block text-sm font-medium text-gray-700">Video URL</label>
-                            <input type="url" id="video_url" name="video_url"
-                                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                        </div>
-                        <div>
-                            <label for="video_duration" class="block text-sm font-medium text-gray-700">Duration (in seconds)</label>
-                            <input type="number" id="video_duration" name="video_duration"
-                                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                        </div>
-                    </div>
+        <div>
+            <label for="video_url" class="block text-sm font-medium text-gray-700">Video URL</label>
+            <input type="url" id="video_url" name="video_url"
+                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        </div>
+    </div>
 
-                    <div id="document_content" class="hidden">
-                        <label for="document_file" class="block text-sm font-medium text-gray-700">Write course content here: </label>
-                        <textarea id="content" name="content" rows="4" required
-                                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
-                    </div>
+    <div id="document_content" class="hidden">
+        <label for="content" class="block text-sm font-medium text-gray-700">Write course content here: </label>
+        <textarea id="content" name="content" rows="4"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+    </div>
+
+    <!-- Add a hidden status field -->
+    <input type="hidden" name="status" value="published">
 
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700">Category</label>

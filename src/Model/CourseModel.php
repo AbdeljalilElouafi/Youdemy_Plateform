@@ -1,8 +1,10 @@
 <?php
 namespace App\Model;
 
-class CourseModel extends BaseModel {
+abstract class CourseModel extends BaseModel {
     protected $table = 'courses';
+
+    abstract public function addContent($courseData, $tagIds = []);
 
     public function getCourses($page = 1, $limit = 6, $search = '') {
         $offset = ($page - 1) * $limit;
@@ -173,7 +175,7 @@ class CourseModel extends BaseModel {
         }
     }
 
-    private function createCourseTags($courseId, array $tagIds) {
+    public function createCourseTags($courseId, array $tagIds) {
         $query = "INSERT INTO course_tags (course_id, tag_id) VALUES (?, ?)";
         $stmt = $this->db->prepare($query);
         
@@ -182,7 +184,7 @@ class CourseModel extends BaseModel {
         }
     }
 
-    private function generateSlug($title) {
+    public function generateSlug($title) {
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title)));
         $baseSlug = $slug;
         $counter = 1;
@@ -195,7 +197,7 @@ class CourseModel extends BaseModel {
         return $slug;
     }
 
-    private function slugExists($slug) {
+    public function slugExists($slug) {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE slug = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$slug]);
@@ -325,4 +327,5 @@ class CourseModel extends BaseModel {
             return [];
         }
     }
+
 }
