@@ -106,7 +106,7 @@
                     </div>
 
                     <div class="flex justify-end space-x-4">
-                        <a href="../../pages/teacher-page.php" 
+                        <a href="../pages/teacher-page.php" 
                            class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                             Cancel
                         </a>

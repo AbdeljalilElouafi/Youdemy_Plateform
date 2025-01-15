@@ -23,10 +23,10 @@ $courses = $courseModel->getCourses($page, $limit, $search);
 $totalCourses = $courseModel->getTotalCourses($search);
 $totalPages = ceil($totalCourses / $limit);
 
-// Get categories for filter
+// Fetching categories for filter
 $categories = $categoryModel->getAllCategories();
 
-// Get courses based on view type
+
 if ($view === 'enrolled' || $view === 'all') {
     $enrolledCourses = $courseModel->getEnrolledCoursesForStudent($studentId, $search, $page, $limit);
 }

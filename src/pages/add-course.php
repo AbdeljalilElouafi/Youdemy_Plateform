@@ -21,7 +21,6 @@ $tags = $tagModel->getAllTags();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Handle file upload for document type
         $contentUrl = '';
         $contentType = $_POST['content_type'];
         
@@ -41,11 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } else {
-            // For video type, just store the URL
             $contentUrl = $_POST['video_url'];
         }
 
-        // Prepare course data
+
         $courseData = [
             'teacher_id' => $_SESSION['user']['id'],
             'title' => $_POST['title'],
