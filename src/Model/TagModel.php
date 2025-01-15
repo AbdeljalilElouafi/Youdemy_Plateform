@@ -3,7 +3,8 @@
 namespace App\Model;
 
 use Config\Database;
-
+use PDO;
+use PDOException;
 
 class TagModel {
     private $db;

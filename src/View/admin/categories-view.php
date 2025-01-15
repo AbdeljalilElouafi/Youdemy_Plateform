@@ -1,3 +1,54 @@
+<?php
+require_once '../../../vendor/autoload.php';
+use App\Model\CategoryModel;
+
+$category = new CategoryModel();
+$message = '';
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'add':
+                $data = [
+                    'name' => $_POST['name'],
+                    'description' => $_POST['description']
+                ];
+                if ($category->addCategory($data)) {
+                    $message = "Category added successfully!";
+                } else {
+                    $error = "Error adding category.";
+                }
+                break;
+
+            case 'edit':
+                $data = [
+                    'name' => $_POST['name'],
+                    'description' => $_POST['description']
+                ];
+                if ($category->editCategory($_POST['id'], $data)) {
+                    $message = "Category updated successfully!";
+                } else {
+                    $error = "Error updating category.";
+                }
+                break;
+
+            case 'delete':
+                if ($category->deleteCategory($_POST['id'])) {
+                    $message = "Category deleted successfully!";
+                } else {
+                    $error = "Error deleting category.";
+                }
+                break;
+        }
+    }
+}
+
+$categories = $category->getCategoriesWithCounts();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,79 +200,131 @@
             <div x-cloak x-show="dropdownOpen" class="absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl">
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profile</a>
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Products</a>
-                <a href="/login" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
+                <a href="../../pages/logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
             </div>
         </div>
     </div>
 </header>
 
 
-    <div class="w-full flex flex-col h-screen overflow-y-hidden">
+<div class="w-full flex flex-col h-screen overflow-y-hidden">
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
                 <h1 class="text-3xl text-black pb-6">Categories</h1>
 
-                <!-- Add Category Button -->
-                <div class="flex justify-end mb-4">
-                    <button onclick="showModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">
-                        Add New Category
-                    </button>
+                <?php if ($message): ?>
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($error): ?>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Add Category Form -->
+                <div class="mb-8">
+                    <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                        <input type="hidden" name="action" value="add">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                                Category Name
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="name" name="name" type="text" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                                Description
+                            </label>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                      id="description" name="description"></textarea>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                                    type="submit">
+                                Add Category
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <!-- Categories Table -->
-                <div class="w-full mt-6">
-                    <div class="bg-white overflow-auto rounded-lg shadow-md">
-                        <table class="min-w-full bg-white">
-                            <thead class="bg-gray-800 text-white">
-                                <tr>
-                                    <th class="w-1/4 text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
-                                    <th class="w-1/4 text-left py-3 px-4 uppercase font-semibold text-sm">Description</th>
-                                    <th class="w-1/4 text-left py-3 px-4 uppercase font-semibold text-sm">Courses Count</th>
-                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                                <tr class="border-b">
-                                    <td class="py-3 px-4">Web Development</td>
-                                    <td class="py-3 px-4">All web development related courses</td>
-                                    <td class="py-3 px-4">42</td>
+                <div class="bg-white overflow-auto rounded-lg shadow-md">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Description</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Courses Count</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <?php foreach ($categories as $cat): ?>
+                                <tr class="border-b hover:bg-gray-100">
+                                    <td class="py-3 px-4"><?php echo htmlspecialchars($cat['name']); ?></td>
+                                    <td class="py-3 px-4"><?php echo htmlspecialchars($cat['description'] ?? ''); ?></td>
+                                    <td class="py-3 px-4"><?php echo htmlspecialchars($cat['courses_count']); ?></td>
                                     <td class="py-3 px-4">
-                                        <button onclick="editCategory(1)" class="text-blue-500 hover:text-blue-700 mr-4">Edit</button>
-                                        <button onclick="deleteCategory(1)" class="text-red-500 hover:text-red-700">Delete</button>
+                                        <!-- Edit Form -->
+                                        <form method="POST" class="inline">
+                                            <input type="hidden" name="action" value="edit">
+                                            <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
+                                            <button type="button" onclick="showEditForm(<?php echo htmlspecialchars(json_encode($cat)); ?>)" 
+                                                    class="text-blue-500 hover:text-blue-700 mr-4">
+                                                Edit
+                                            </button>
+                                        </form>
+
+                                        <!-- Delete Form -->
+                                        <form method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
+                                            <button type="submit" class="text-red-500 hover:text-red-700">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
-                                <!-- More category rows... -->
-                            </tbody>
-                        </table>
-                    </div>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Add/Edit Category Modal -->
-                <div id="categoryModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+                <!-- Edit Category Modal -->
+                <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
                     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                        <div class="mt-3">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">Add New Category</h3>
-                            <div class="mt-2">
-                                <form class="mt-4">
-                                    <div class="mb-4">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="categoryName">
-                                            Category Name
-                                        </label>
-                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="categoryName" type="text" placeholder="Enter category name">
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="categoryDescription">
-                                            Description
-                                        </label>
-                                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="categoryDescription" placeholder="Enter category description"></textarea>
-                                    </div>
-                                    <div class="flex items-center justify-between mt-4">
-                                        <button onclick="closeModal()" type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                                        <button onclick="saveCategory()" type="button" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Save</button>
-                                    </div>
-                                </form>
+                        <form method="POST">
+                            <input type="hidden" name="action" value="edit">
+                            <input type="hidden" name="id" id="edit_id">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_name">
+                                    Category Name
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                       id="edit_name" name="name" type="text" required>
                             </div>
-                        </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_description">
+                                    Description
+                                </label>
+                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                          id="edit_description" name="description"></textarea>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <button type="button" onclick="closeEditModal()" 
+                                        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    Cancel
+                                </button>
+                                <button type="submit" 
+                                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    Update
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </main>
@@ -232,19 +335,16 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     
     <script>
-        function showModal() {
-            document.getElementById('categoryModal').classList.remove('hidden');
+        function showEditForm(category) {
+            document.getElementById('edit_id').value = category.id;
+            document.getElementById('edit_name').value = category.name;
+            document.getElementById('edit_description').value = category.description || '';
+            document.getElementById('editModal').classList.remove('hidden');
         }
-        
-        function closeModal() {
-            document.getElementById('categoryModal').classList.add('hidden');
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
         }
-        
-        function saveCategory() {
-            // Add your save logic here
-            closeModal();
-        }
-        
     </script>
 </body>
 </html>

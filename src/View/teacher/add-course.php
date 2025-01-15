@@ -65,9 +65,9 @@
                     </div>
 
                     <div id="document_content" class="hidden">
-                        <label for="document_file" class="block text-sm font-medium text-gray-700">Upload Document (PDF or Word)</label>
-                        <input type="file" id="document_file" name="document_file" accept=".pdf,.doc,.docx"
-                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                        <label for="document_file" class="block text-sm font-medium text-gray-700">Write course content here: </label>
+                        <textarea id="content" name="content" rows="4" required
+                                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                     </div>
 
                     <div>
@@ -96,14 +96,6 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select id="status" name="status" required
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                            <option value="draft">Draft</option>
-                            <option value="published">Published</option>
-                        </select>
-                    </div>
 
                     <div class="flex justify-end space-x-4">
                         <a href="../pages/teacher-page.php" 
