@@ -88,10 +88,10 @@
                         <p class="text-gray-600 mb-4"><?= htmlspecialchars($course['description']) ?></p>
                         <form action="/student/enroll.php" method="POST">
                             <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
-                            <button type="submit" 
+                            <a  href="../pages/course-page.php?id=<?= $course['id'] ?>" 
                                     class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
                                 Enroll Now
-                            </button>
+                            </a>
                         </form>
                     </div>
                 </div>
@@ -104,8 +104,8 @@
         <div class="flex justify-center mt-8 gap-2">
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <a href="/Youdemy_Plateform/src/pages/student-page.php?page=<?= $i ?><?= $search ? '&search=' . urlencode($search) : '' ?>" 
-                  class="<?= $page === $i ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600' ?> 
-                         px-4 py-2 rounded-md hover:bg-indigo-700 hover:text-white">
+                  class="<?= $page === $i ? 'bg-green-500 text-white' : 'bg-white text-indigo-600' ?> 
+                         px-4 py-2 rounded-md hover:bg-green-800 hover:text-white">
                     <?= $i ?>
                 </a>
             <?php endfor; ?>

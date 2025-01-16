@@ -154,7 +154,6 @@ abstract class CourseModel extends BaseModel {
                 throw new \Exception('Failed to create course');
             }
 
-            // Insert course content
             $contentQuery = "INSERT INTO course_contents (course_id, title, content_type, content_url, duration, file_size, order_index) 
                            VALUES (?, ?, ?, ?, ?, ?, 1)";
             
@@ -168,7 +167,7 @@ abstract class CourseModel extends BaseModel {
                 $courseData['content']['file_size']
             ]);
 
-            // Insert course tags
+
             if (!empty($tagIds)) {
                 $this->createCourseTags($courseId, $tagIds);
             }
@@ -214,9 +213,8 @@ abstract class CourseModel extends BaseModel {
 
 
     public function getCourseWithContent($courseId) {
-        $sql = "SELECT c.*, cc.content_type, cc.content_url, cc.duration, cc.file_size 
+        $sql = "SELECT *
                 FROM {$this->table} c
-                LEFT JOIN course_contents cc ON c.id = cc.course_id
                 WHERE c.id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$courseId]);
