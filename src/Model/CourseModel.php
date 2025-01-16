@@ -121,6 +121,14 @@ abstract class CourseModel extends BaseModel {
         $stmt->execute([$id]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+    
+    public function getCourseBySlug($slug) {
+        $sql = "SELECT * FROM courses WHERE slug = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$slug]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
 
     public function createCourseWithContent($courseData, $tagIds) {
         try {

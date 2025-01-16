@@ -95,7 +95,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <a href="/teacher/edit-course.php?id=<?= $course['id'] ?>" 
+                                <a href="../pages/edit-course.php?slug=<?= $course['slug'] ?>"
                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 <a href="/teacher/course-details.php?id=<?= $course['id'] ?>" 
                                    class="text-green-600 hover:text-green-900">View</a>

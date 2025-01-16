@@ -25,10 +25,10 @@ class CategoryModel extends BaseModel {
 
 
 
-    // Create new category
+
     public function addCategory($data) {
         try {
-            // Generate slug from name
+
             $data['slug'] = $this->generateSlug($data['name']);
             return $this->insertRecord($this->table, $data);
         } catch(PDOException $e) {
@@ -37,7 +37,7 @@ class CategoryModel extends BaseModel {
         }
     }
 
-    // Update category
+
     public function editCategory($id, $data) {
         try {
             if (isset($data['name'])) {
@@ -50,7 +50,7 @@ class CategoryModel extends BaseModel {
         }
     }
 
-    // Delete category
+
     public function deleteCategory($id) {
         return $this->deleteRecord($this->table, $id);
     }

@@ -41,4 +41,36 @@ class VideoCourse extends CourseModel {
             throw $e;
         }
     }
+
+    public function updateCourse($courseId, $courseData) {
+        try {
+            $this->db->beginTransaction();
+            
+            $slug = $this->generateSlug($courseData['title']);
+            
+            $sql = "UPDATE {$this->table} SET
+                    title = ?, slug = ?, description = ?, teacher_id = ?, 
+                    category_id = ?, status = ?, content_url = ?
+                    WHERE id = ?";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $courseData['title'],
+                $slug,
+                $courseData['description'],
+                $courseData['teacher_id'],
+                $courseData['category_id'],
+                $courseData['status'],
+                $courseData['video_url'],
+                $courseId
+            ]);
+            
+            $this->db->commit();
+            return $courseId;
+            
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
 }
