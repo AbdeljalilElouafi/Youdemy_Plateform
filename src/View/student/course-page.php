@@ -13,11 +13,11 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="/student-page.php" class="text-2xl font-bold text-indigo-600">Youdemy</a>
+                    <a href="student-page.php" class="text-2xl font-bold text-indigo-600">Youdemy</a>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-gray-600">Welcome, <?= htmlspecialchars($_SESSION['user']['first_name']) ?></span>
-                    <a href="/logout.php" class="text-red-600 hover:text-red-800">Logout</a>
+                    <a href="../pages/logout.php" class="text-red-600 hover:text-red-800">Logout</a>
                 </div>
             </div>
         </div>
@@ -60,9 +60,8 @@
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-2xl font-bold mb-4">Course Content</h2>
                     <?php if ($course['content_type'] === 'video' && $course['content_url']): ?>
-                        <div class="aspect-w-18 aspect-h-9 mb-4">
-
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/rIfdg_Ot-LI?si=ML6K2QTto0L1viFx&amp;controls=0"
+                        <div class="aspect-w-16 aspect-h-9 mb-4">
+                            <iframe width="560" height="315" src="<?= htmlspecialchars($course['content_url']) ?>"
                                  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                   referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                             </iframe>
