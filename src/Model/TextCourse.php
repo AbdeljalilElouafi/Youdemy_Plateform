@@ -3,7 +3,7 @@
 namespace App\Model;
 
 
-
+ 
 class TextCourse extends CourseModel {
     public function addContent($courseData, $tagIds = []) {
         try {
