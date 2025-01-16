@@ -66,7 +66,7 @@
                             <span class="text-sm text-gray-500">
                                 Enrolled: <?= date('M d, Y', strtotime($course['enrolled_at'])) ?>
                             </span>
-                            <a href="/student/course-view.php?id=<?= $course['id'] ?>" 
+                            <a href="../pages/course-page.php?id=<?= $course['id'] ?>" 
                                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
                                 Continue Learning
                             </a>
@@ -86,12 +86,12 @@
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-2"><?= htmlspecialchars($course['title']) ?></h3>
                         <p class="text-gray-600 mb-4"><?= htmlspecialchars($course['description']) ?></p>
-                        <form action="/student/enroll.php" method="POST">
+                        <form action="../pages/enroll-student.php" method="POST" class="w-full">
                             <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
-                            <a  href="../pages/course-page.php?id=<?= $course['id'] ?>" 
+                            <button type="submit" 
                                     class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
                                 Enroll Now
-                            </a>
+                            </button>
                         </form>
                     </div>
                 </div>
