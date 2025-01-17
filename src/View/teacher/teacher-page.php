@@ -72,7 +72,7 @@
                                 Actions
                             </th>
                         </tr>
-                    </thead>
+                    </thead> 
                     <tbody class="bg-white divide-y divide-gray-200">
                         <?php foreach ($courses as $course): ?>
                         <tr>
