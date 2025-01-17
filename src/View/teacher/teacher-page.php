@@ -97,10 +97,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                 <a href="../pages/edit-course.php?slug=<?= $course['slug'] ?>"
                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                <a href="/teacher/course-details.php?id=<?= $course['id'] ?>" 
+                                <a href="../pages/course-page.php?id=<?= $course['id'] ?>" 
                                    class="text-green-600 hover:text-green-900">View</a>
-                                <button onclick="deleteCourse(<?= $course['id'] ?>)" 
-                                        class="text-red-600 hover:text-red-900">Delete</button>
+                                <a href="../pages/delete-course.php?id=<?= $course['id'] ?>" 
+                                        class="text-red-600 hover:text-red-900">Delete</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -110,25 +110,5 @@
         </div>
     </div>
 
-    <script>
-    function deleteCourse(courseId) {
-        if (confirm('Are you sure you want to delete this course?')) {
-            fetch(`/api/courses/${courseId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                } else {
-                    alert('Failed to delete course');
-                }
-            });
-        }
-    }
-    </script>
 </body>
 </html>

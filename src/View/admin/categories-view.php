@@ -70,7 +70,7 @@ $categories = $category->getCategoriesWithCounts();
 </head>
 <body class="bg-gray-100 font-family-karla flex">
 
-    <!-- Sidebar and Header section remains the same as your original template -->
+
 
 
     <div x-cloak :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
@@ -331,7 +331,7 @@ $categories = $category->getCategoriesWithCounts();
         </div>
     </div>
 
-    <!-- AlpineJS -->
+
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     
     <script>

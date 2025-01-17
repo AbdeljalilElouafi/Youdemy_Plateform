@@ -19,7 +19,7 @@
 </head>
 <body class="bg-gray-100 font-family-karla flex">
 
-    <!-- Sidebar and Header section remains the same as your original template -->
+
 
 
     <div x-cloak :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
@@ -161,7 +161,7 @@
             <main class="w-full flex-grow p-6">
                 <h1 class="text-3xl text-black pb-6">Tags</h1>
 
-                <!-- Add Tag Button -->
+
                 <div class="flex justify-end mb-4">
                     <button onclick="showModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">
                         Add New Tag
@@ -172,7 +172,7 @@
                 <div class="w-full mt-6">
                     <div class="bg-white overflow-auto rounded-lg shadow-md p-6">
                         <div class="flex flex-wrap gap-3">
-                            <!-- Individual Tags -->
+
                             <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
                                 <span class="text-gray-800 mr-2">JavaScript</span>
                                 <div class="flex space-x-2">
@@ -192,7 +192,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Add/Edit Tag Modal -->
                 <div id="tagModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
                     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">

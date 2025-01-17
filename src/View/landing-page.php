@@ -1,17 +1,17 @@
 <?php
 
-require_once '../../vendor/autoload.php';
-use App\Model\CourseModel;
+    require_once '../../vendor/autoload.php';
+    use App\Model\CourseModel;
 
-$courseModel = new \App\Model\VideoCourse();
-// $courseModel = new CourseModel();
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = 6; 
-$search = isset($_GET['search']) ? $_GET['search'] : '';
+    $courseModel = new \App\Model\VideoCourse();
+    // $courseModel = new CourseModel();
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $limit = 6; 
+    $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-$courses = $courseModel->getCourses($page, $limit, $search);
-$totalCourses = $courseModel->getTotalCourses($search);
-$totalPages = ceil($totalCourses / $limit);
+    $courses = $courseModel->getCourses($page, $limit, $search);
+    $totalCourses = $courseModel->getTotalCourses($search);
+    $totalPages = ceil($totalCourses / $limit);
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +84,7 @@ $totalPages = ceil($totalCourses / $limit);
                     <p class="text-gray-600 mb-4"><?= htmlspecialchars($course['description']) ?></p>
                     <div class="flex justify-between items-center">
                         
-                        <a href="/course.php?id=<?= $course['id'] ?>" 
+                        <a href="../pages/login.php" 
                            class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
                             Learn More
                         </a>
@@ -114,7 +114,7 @@ $totalPages = ceil($totalCourses / $limit);
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4">About Youdemy</h3>
-                    <p>Your gateway to online learning excellence.</p>
+                    <p>Your gateway to online learning excellence, Created by: AbdeljalilElouafi</p>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4">Quick Links</h3>
@@ -126,8 +126,8 @@ $totalPages = ceil($totalCourses / $limit);
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4">Contact Us</h3>
-                    <p>Email: support@youdemy.com</p>
-                    <p>Phone: (555) 123-4567</p>
+                    <p>Email: abdeljalileloufi2@gmail.com</p>
+                    <p>Phone: 0666666666</p>
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-gray-700 text-center">
