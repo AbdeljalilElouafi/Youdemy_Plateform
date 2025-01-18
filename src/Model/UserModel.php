@@ -84,4 +84,44 @@ class UserModel extends AbstractModel {
                 exit;
             }
         }
+
+
+        public function getAllUsers($role = null, $status = null) {
+            $sql = "SELECT * FROM users WHERE role != 'admin'";
+            $params = [];
+            
+            if ($role) {
+                $sql .= " AND role = :role";
+                $params['role'] = $role;
+            }
+            
+            if ($status) {
+                $sql .= " AND status = :status";
+                $params['status'] = $status;
+            }
+            
+            $sql .= " ORDER BY created_at DESC";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        
+        public function updateUserStatus($userId, $status) {
+            $stmt = $this->db->prepare(
+                "UPDATE users SET status = :status WHERE id = :id AND role != 'admin'"
+            );
+            return $stmt->execute([
+                'id' => $userId,
+                'status' => $status
+            ]);
+        }
+        
+        public function deleteUser($userId) {
+            $stmt = $this->db->prepare(
+                "UPDATE users SET status = 'deleted' WHERE id = :id AND role != 'admin'"
+            );
+            return $stmt->execute(['id' => $userId]);
+        }
+
 }

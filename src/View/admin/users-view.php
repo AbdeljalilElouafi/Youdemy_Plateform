@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tags - Youdemy Dashboard</title>
+    <title>Users Management - Youdemy Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
         .font-family-karla { font-family: karla; }
@@ -18,8 +19,8 @@
     </style>
 </head>
 <body class="bg-gray-100 font-family-karla flex">
-    
-    <div x-cloak :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
+
+   <div x-cloak :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
     
     <div x-cloak :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0">
         <div class="flex items-center justify-center mt-8">
@@ -66,6 +67,7 @@
     
                 <span class="mx-3">All Users</span>
             </a>
+            
             <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="../pages/courses-management.php">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -76,10 +78,12 @@
         </nav>
     </div>
 
-    <div class="flex-1 flex flex-col overflow-hidden">
-
-    <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">
-        <div class="flex items-center">
+    <div class="w-full flex flex-col h-screen overflow-y-hidden">
+        <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+            <div class="w-1/2"></div>
+            <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
+            
+         <div class="flex items-center">
             <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -95,9 +99,9 @@
 
                 <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600" type="text" placeholder="Search">
             </div>
-        </div>
+         </div>
         
-        <div class="flex items-center">
+         <div class="flex items-center">
             <div x-data="{ notificationOpen: false }" class="relative">
                 <button @click="notificationOpen = ! notificationOpen" class="flex mx-4 text-gray-600 focus:outline-none">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -148,14 +152,14 @@
                     <a href="../../pages/logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
                 </div>
             </div>
-        </div>
-    </header>
+         </div>
 
+            </div>
+        </header>
 
-    <div class="w-full flex flex-col h-screen overflow-y-hidden">
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <h1 class="text-3xl text-black pb-6">Tags</h1>
+                <h1 class="text-3xl text-black pb-6">Users Management</h1>
 
                 <?php if ($message): ?>
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
@@ -169,103 +173,118 @@
                     </div>
                 <?php endif; ?>
 
-                <!-- Add Tags Form -->
-                <div class="mb-8">
-                    <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                        <input type="hidden" name="action" value="add">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="names">
-                                Tag Names (comma-separated)
-                            </label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                   id="names" name="names" type="text" 
-                                   placeholder="Enter tags (e.g., JavaScript, Python, Web Development)"
-                                   required>
-                            <p class="text-gray-600 text-xs mt-1">Separate multiple tags with commas</p>
-                        </div>
-                        <div class="flex items-center justify-end">
-                            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
-                                    type="submit">
-                                Add Tags
-                            </button>
-                        </div>
+                <!-- Filters -->
+                <div class="mb-6">
+                    <form method="GET" class="flex gap-4">
+                        <select name="role" class="bg-white border border-gray-300 rounded-lg px-4 py-2">
+                            <option value="">All Roles</option>
+                            <option value="teacher" <?php echo $roleFilter === 'teacher' ? 'selected' : ''; ?>>Teachers</option>
+                            <option value="student" <?php echo $roleFilter === 'student' ? 'selected' : ''; ?>>Students</option>
+                        </select>
+                        
+                        <select name="status" class="bg-white border border-gray-300 rounded-lg px-4 py-2">
+                            <option value="">All Status</option>
+                            <option value="pending" <?php echo $statusFilter === 'pending' ? 'selected' : ''; ?>>Pending</option>
+                            <option value="active" <?php echo $statusFilter === 'active' ? 'selected' : ''; ?>>Active</option>
+                            <option value="suspended" <?php echo $statusFilter === 'suspended' ? 'selected' : ''; ?>>Suspended</option>
+                        </select>
+                        
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                            Apply Filters
+                        </button>
                     </form>
                 </div>
 
-                <!-- Tags Display -->
-                <div class="bg-white overflow-auto rounded-lg shadow-md">
-                    <div class="p-6">
-                        <div class="flex flex-wrap gap-3">
-                            <?php foreach ($tags as $t): ?>
-                                <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
-                                    <span class="text-gray-800 mr-2"><?php echo htmlspecialchars($t['name']); ?></span>
-                                    <div class="flex space-x-2">
-                                        <button onclick="showEditForm(<?php echo htmlspecialchars(json_encode($t)); ?>)" 
-                                                class="text-blue-500 hover:text-blue-700">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                            </svg>
-                                        </button>
-                                        <form method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this tag?');">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo $t['id']; ?>">
-                                            <button type="submit" class="text-red-500 hover:text-red-700">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
+                <!-- Users Table -->
+                <div class="bg-white overflow-auto rounded-lg shadow">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Role</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Status</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Last Login</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <?php foreach ($users as $user): ?>
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="py-3 px-4">
+                                        <?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?>
+                                    </td>
+                                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['email']); ?></td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            <?php echo $user['role'] === 'teacher' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'; ?>">
+                                            <?php echo ucfirst($user['role']); ?>
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            <?php
+                                            switch ($user['status']) {
+                                                case 'active':
+                                                    echo 'bg-green-100 text-green-800';
+                                                    break;
+                                                case 'pending':
+                                                    echo 'bg-yellow-100 text-yellow-800';
+                                                    break;
+                                                case 'suspended':
+                                                    echo 'bg-red-100 text-red-800';
+                                                    break;
+                                                default:
+                                                    echo 'bg-gray-100 text-gray-800';
+                                            }
+                                            ?>">
+                                            <?php echo ucfirst($user['status']); ?>
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <?php echo $user['last_login_at'] ? date('Y-m-d H:i', strtotime($user['last_login_at'])) : 'Never'; ?>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex space-x-2">
+                                            <?php if ($user['status'] !== 'active'): ?>
+                                                <form method="POST" class="inline">
+                                                    <input type="hidden" name="action" value="activate">
+                                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                    <button type="submit" class="text-green-600 hover:text-green-900" 
+                                                            onclick="return confirm('Are you sure you want to activate this user?')">
+                                                        Activate
+                                                    </button>
+                                                </form>
+                                            <?php endif; ?>
+                                            
+                                            <?php if ($user['status'] !== 'suspended'): ?>
+                                                <form method="POST" class="inline">
+                                                    <input type="hidden" name="action" value="suspend">
+                                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900"
+                                                            onclick="return confirm('Are you sure you want to suspend this user?')">
+                                                        Suspend
+                                                    </button>
+                                                </form>
+                                            <?php endif; ?>
+                                            
+                                            <form method="POST" class="inline">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                <button type="submit" class="text-red-600 hover:text-red-900"
+                                                        onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Edit Tag Modal -->
-                <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-                    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                        <form method="POST">
-                            <input type="hidden" name="action" value="edit">
-                            <input type="hidden" name="id" id="edit_id">
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_name">
-                                    Tag Name
-                                </label>
-                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                       id="edit_name" name="name" type="text" required>
-                            </div>
-                            <div class="flex items-center justify-between mt-4">
-                                <button type="button" onclick="closeEditModal()" 
-                                        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                    Cancel
-                                </button>
-                                <button type="submit" 
-                                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                    Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </main>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-    
-    <script>
-        function showEditForm(tag) {
-            document.getElementById('edit_id').value = tag.id;
-            document.getElementById('edit_name').value = tag.name;
-            document.getElementById('editModal').classList.remove('hidden');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
-    </script>
 </body>
 </html>
