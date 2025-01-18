@@ -114,6 +114,19 @@ abstract class CourseModel extends BaseModel {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getTopCourses() {
+        $sql = "SELECT c.*, COUNT(e.id) as enrollment_count, u.first_name, u.last_name 
+                FROM courses c 
+                LEFT JOIN enrollments e ON c.id = e.course_id 
+                LEFT JOIN users u ON c.teacher_id = u.id 
+                GROUP BY c.id 
+                ORDER BY enrollment_count DESC 
+                LIMIT 3";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function getStudentCourses($studentId) {
         $sql = "SELECT c.*, e.status as enrollment_status, e.enrolled_at
                 FROM courses c

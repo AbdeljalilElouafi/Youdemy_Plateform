@@ -28,6 +28,32 @@ class UserModel extends AbstractModel {
         return $stmt->execute($data);
     }
 
+    public function countTeachers() {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM users WHERE role = 'teacher'");
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+    
+    public function countStudents() {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM users WHERE role = 'student'");
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+    
+    public function getTopTeachers() {
+        $sql = "SELECT u.*, COUNT(c.id) as course_count, COUNT(DISTINCT e.student_id) as student_count 
+                FROM users u 
+                LEFT JOIN courses c ON u.id = c.teacher_id 
+                LEFT JOIN enrollments e ON c.id = e.course_id 
+                WHERE u.role = 'teacher' 
+                GROUP BY u.id 
+                ORDER BY student_count DESC 
+                LIMIT 3";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     private function updateLastLogin($userId) {
         $stmt = $this->db->prepare(
             "UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE id = :id"
