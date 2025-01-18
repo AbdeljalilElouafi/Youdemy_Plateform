@@ -64,6 +64,33 @@ abstract class CourseModel extends BaseModel {
         return $this->deleteRecord($this->table, $id);
     }
  
+
+    public function getTeacherStudents($teacherId) {
+        $sql = "SELECT DISTINCT 
+                    u.id,
+                    u.first_name,
+                    u.last_name,
+                    u.email,
+                    GROUP_CONCAT(c.title) as enrolled_courses,
+                    COUNT(DISTINCT e.course_id) as courses_count,
+                    MAX(e.enrolled_at) as last_enrollment_date
+                FROM users u
+                JOIN enrollments e ON u.id = e.student_id
+                JOIN courses c ON e.course_id = c.id
+                WHERE c.teacher_id = ? AND u.role = 'student'
+                GROUP BY u.id, u.first_name, u.last_name, u.email
+                ORDER BY last_enrollment_date DESC";
+                
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$teacherId]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in getTeacherStudents: " . $e->getMessage());
+            return [];
+        }
+    }
+
     public function getTeacherCourses($teacherId, $page = 1, $limit = 20) {
         $offset = ($page - 1) * $limit;
         $sql = "SELECT * FROM {$this->table} WHERE teacher_id = ? LIMIT ? OFFSET ?";

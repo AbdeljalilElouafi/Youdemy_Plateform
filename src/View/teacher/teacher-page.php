@@ -31,18 +31,14 @@
                 <h3 class="text-lg font-semibold mb-2">Total Courses</h3>
                 <p class="text-3xl text-indigo-600"><?= count($courses) ?></p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
+            <!-- consultation des etudiants -->
+            <a href="../pages/total-students.php" 
+             class="bg-white p-6 rounded-lg shadow-md hover:bg-green-600">
                 <h3 class="text-lg font-semibold mb-2">Total Students</h3>
                 <p class="text-3xl text-indigo-600">
                     <?= array_sum(array_column($statistics, 'student_count')) ?>
                 </p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-lg font-semibold mb-2">Completed Courses</h3>
-                <p class="text-3xl text-indigo-600">
-                    <?= array_sum(array_column($statistics, 'completed_count')) ?>
-                </p>
-            </div>
+            </a>
         </div>
 
         <!-- Course Management -->
