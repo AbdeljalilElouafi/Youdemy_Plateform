@@ -6,9 +6,8 @@ use Config\Database;
 use PDO;
 use PDOException;
 
-class TagModel {
+class TagModel extends BaseModel {
     private $table = 'tags';
-    
     
     protected $db;
     public $id;
@@ -18,7 +17,6 @@ class TagModel {
     public $created_at;
     public $updated_at;
 
-
     public function __construct() {
         $this->db = Database::getInstance();
     }
@@ -26,7 +24,17 @@ class TagModel {
     public function addTag($data) {
         try {
 
-            $data['slug'] = $this->generateSlug($data['name']);
+            if ($this->tagExists($data['name'])) {
+                error_log("Tag already exists: " . $data['name']);
+                return false;  
+            }
+
+
+            if (empty($data['slug'])) {
+                $data['slug'] = $this->generateUniqueSlug($data['name']);
+            }
+
+
             return $this->insertRecord($this->table, $data);
         } catch(PDOException $e) {
             error_log("Error in addTag: " . $e->getMessage());
@@ -35,24 +43,63 @@ class TagModel {
     }
 
 
+    private function tagExists($tagName) {
+        $sql = "SELECT COUNT(*) FROM " . $this->table . " WHERE name = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tagName]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+ 
+    private function slugExists($slug) {
+        $sql = "SELECT COUNT(*) FROM " . $this->table . " WHERE slug = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$slug]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+
+    public function generateUniqueSlug($name) {
+
+        $slug = $this->generateSlug($name);
+
+
+        $counter = 1;
+        $originalSlug = $slug;
+        while ($this->slugExists($slug)) {
+            $slug = $originalSlug . '-' . $counter++;
+        }
+
+        return $slug;
+    }
+
+
+    public function generateSlug($name) {
+        $slug = strtolower(trim($name));
+        $slug = preg_replace('/\s+/', '-', $slug);
+        $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
+        return $slug;
+    }
+
     public function editTag($id, $data) {
         try {
             if (isset($data['name'])) {
-                $data['slug'] = $this->generateSlug($data['name'], $id);
+
+                if (isset($data['slug']) && $this->slugExists($data['slug'])) {
+                    error_log("Slug already exists: " . $data['slug']);
+                    return false;
+                }
+                return $this->updateRecord($this->table, $data, $id);
             }
-            return $this->updateRecord($this->table, $data, $id);
         } catch(PDOException $e) {
             error_log("Error in editTag: " . $e->getMessage());
             return false;
         }
     }
 
-
     public function deleteTag($id) {
         return $this->deleteRecord($this->table, $id);
     }
-
-
 
     public function getAllTags() {
         $query = "SELECT id, name FROM tags WHERE 1 ORDER BY name ASC";
@@ -72,6 +119,4 @@ class TagModel {
         return true;
     }
 }
-
-
 ?>

@@ -111,6 +111,7 @@ class CategoryModel extends BaseModel {
         
         return $slug;
     }
+    
     public function countCategories() {
         try {
             $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM {$this->table}");

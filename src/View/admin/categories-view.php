@@ -1,54 +1,3 @@
-<?php
-require_once '../../../vendor/autoload.php';
-use App\Model\CategoryModel;
-
-$category = new CategoryModel();
-$message = '';
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'add':
-                $data = [
-                    'name' => $_POST['name'],
-                    'description' => $_POST['description']
-                ];
-                if ($category->addCategory($data)) {
-                    $message = "Category added successfully!";
-                } else {
-                    $error = "Error adding category.";
-                }
-                break;
-
-            case 'edit':
-                $data = [
-                    'name' => $_POST['name'],
-                    'description' => $_POST['description']
-                ];
-                if ($category->editCategory($_POST['id'], $data)) {
-                    $message = "Category updated successfully!";
-                } else {
-                    $error = "Error updating category.";
-                }
-                break;
-
-            case 'delete':
-                if ($category->deleteCategory($_POST['id'])) {
-                    $message = "Category deleted successfully!";
-                } else {
-                    $error = "Error deleting category.";
-                }
-                break;
-        }
-    }
-}
-
-$categories = $category->getCategoriesWithCounts();
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,7 +54,7 @@ $categories = $category->getCategoriesWithCounts();
                 <span class="mx-3">Categories</span>
             </a>
 
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="tags-view.php">
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="../pages/tags-page.php">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
                 </svg>
@@ -113,7 +62,7 @@ $categories = $category->getCategoriesWithCounts();
                 <span class="mx-3">Tags</span>
             </a>
     
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="../src/pages/users.php">
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="../pages/users-page.php">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
@@ -121,7 +70,7 @@ $categories = $category->getCategoriesWithCounts();
                 <span class="mx-3">All Users</span>
             </a>
     
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="../src/pages/teachers.php">
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="../pages/teachers-page.php">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -131,9 +80,9 @@ $categories = $category->getCategoriesWithCounts();
         </nav>
     </div>
 
-<div class="flex-1 flex flex-col overflow-hidden">
+ <div class="flex-1 flex flex-col overflow-hidden">
 
-<header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">
+ <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">
     <div class="flex items-center">
         <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -204,7 +153,7 @@ $categories = $category->getCategoriesWithCounts();
             </div>
         </div>
     </div>
-</header>
+ </header>
 
 
 <div class="w-full flex flex-col h-screen overflow-y-hidden">
