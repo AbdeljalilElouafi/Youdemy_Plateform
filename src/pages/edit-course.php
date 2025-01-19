@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $courseModel = new TextCourse();
         }
 
-        $courseId = $courseModel->updateCourse($course['id'], $courseData); 
+        $courseId = $courseModel->updateVCourse($course['id'], $courseData); 
 
         if ($courseId) {
             $courseModel->createCourseTags($courseId, $tagIds);  

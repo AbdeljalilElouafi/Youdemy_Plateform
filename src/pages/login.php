@@ -18,16 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => $user['id'],
                 'email' => $user['email'],
                 'role' => $user['role'],
+                'status' => $user['status'],
                 'first_name' => $user['first_name'],
                 'last_name' => $user['last_name']
             ];
 
-            if ($user['role'] === 'teacher') {
+            if ($user['role'] === 'teacher' && $user['status'] === 'active' ) {
                 header('Location: ../pages/teacher-page.php');
             } else if ($user['role'] === 'student') {
                 header('Location: ../pages/student-page.php');
+            } else if ($user['role'] === 'admin'){
+                header('Location: ../pages/admin-dashboard.php');   
             } else {
-                header('Location: ../pages/admin-dashboard.php');    }
+                header('Location: ../pages/login.php');   
+            }
                     exit;
             }
           

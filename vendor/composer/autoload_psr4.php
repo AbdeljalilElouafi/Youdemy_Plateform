@@ -12,6 +12,7 @@ return array(
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
+    'Controller\\' => array($baseDir . '/pages'),
     'Config\\' => array($baseDir . '/config'),
     'App\\' => array($baseDir . '/src'),
 );

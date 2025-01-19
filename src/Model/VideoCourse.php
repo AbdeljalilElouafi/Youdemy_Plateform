@@ -42,7 +42,7 @@ class VideoCourse extends CourseModel {
         }
     }
 
-    public function updateCourse($courseId, $courseData) {
+    public function updateVCourse($courseId, $courseData) {
         try {
             $this->db->beginTransaction();
             

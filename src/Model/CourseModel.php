@@ -264,7 +264,7 @@ abstract class CourseModel extends BaseModel {
     public function searchCourses($searchTerm = '', $page = 1, $limit = 6, $categoryId = null) {
         $offset = ($page - 1) * $limit;
         
-        $sql = "SELECT c.*, u.first_name, u.last_name, cat.name as category_name,
+        $sql = "SELECT c.*, u.first_name as teacher_name, u.last_name, cat.name as category_name,
                 GROUP_CONCAT(t.name) as tags
                 FROM {$this->table} c
                 LEFT JOIN users u ON c.teacher_id = u.id
@@ -272,6 +272,43 @@ abstract class CourseModel extends BaseModel {
                 LEFT JOIN course_tags ct ON c.id = ct.course_id
                 LEFT JOIN tags t ON ct.tag_id = t.id
                 WHERE c.status = 'published'";
+        
+        $params = [];
+        
+        if ($searchTerm) {
+            $sql .= " AND (c.title LIKE ? OR c.description LIKE ? OR t.name LIKE ?)";
+            $searchPattern = "%{$searchTerm}%";
+            $params = array_merge($params, [$searchPattern, $searchPattern, $searchPattern]);
+        }
+        
+        if ($categoryId) {
+            $sql .= " AND c.category_id = ?";
+            $params[] = $categoryId;
+        }
+        
+        $sql .= " GROUP BY c.id LIMIT ? OFFSET ?";
+        $params[] = $limit;
+        $params[] = $offset;
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in searchCourses: " . $e->getMessage());
+            return [];
+        }
+    }
+    public function searchAllCourses($searchTerm = '', $page = 1, $limit = 6, $categoryId = null) {
+        $offset = ($page - 1) * $limit;
+        
+        $sql = "SELECT c.*, u.first_name as teacher_name, u.last_name, cat.name as category_name,
+                GROUP_CONCAT(t.name) as tags
+                FROM {$this->table} c
+                LEFT JOIN users u ON c.teacher_id = u.id
+                LEFT JOIN categories cat ON c.category_id = cat.id
+                LEFT JOIN course_tags ct ON c.id = ct.course_id
+                LEFT JOIN tags t ON ct.tag_id = t.id";
         
         $params = [];
         
