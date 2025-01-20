@@ -36,7 +36,7 @@
             </div>
         </div>
     </nav>
-
+ 
     <!-- Hero Section -->
     <div class="bg-slate-700 text-white">
         <div class="max-w-7xl mx-auto px-4 py-16">
