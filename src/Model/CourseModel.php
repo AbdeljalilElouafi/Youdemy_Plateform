@@ -56,8 +56,81 @@ abstract class CourseModel extends BaseModel {
         return $this->insertRecord($this->table, $data);
     }
 
+    public function getCourseWithTags($slug) {
+        $sql = "SELECT c.*, 
+                GROUP_CONCAT(t.id) as tag_ids,
+                GROUP_CONCAT(t.name) as tag_names
+                FROM {$this->table} c
+                LEFT JOIN course_tags ct ON c.id = ct.course_id
+                LEFT JOIN tags t ON ct.tag_id = t.id
+                WHERE c.slug = ?
+                GROUP BY c.id";
+                
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$slug]);
+            $course = $stmt->fetch(\PDO::FETCH_ASSOC);
+            
+            if ($course) {
+                // Convert tag strings to arrays
+                $course['tags'] = [];
+                if ($course['tag_ids']) {
+                    $tagIds = explode(',', $course['tag_ids']);
+                    $tagNames = explode(',', $course['tag_names']);
+                    foreach ($tagIds as $i => $id) {
+                        $course['tags'][] = [
+                            'id' => $id,
+                            'name' => $tagNames[$i]
+                        ];
+                    }
+                }
+                unset($course['tag_ids'], $course['tag_names']);
+            }
+            
+            return $course;
+        } catch (\PDOException $e) {
+            error_log("Error in getCourseWithTags: " . $e->getMessage());
+            return null;
+        }
+    }
+    
+    public function deleteCourseTags($courseId) {
+        $sql = "DELETE FROM course_tags WHERE course_id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$courseId]);
+    }
+    
     public function updateCourse($id, $data) {
-        return $this->updateRecord($this->table, $data, $id);
+        $allowedFields = [
+            'title', 'description', 'category_id', 'status',
+            'content_type', 'content_url', 'content_text'
+        ];
+        
+        $updateData = array_intersect_key($data, array_flip($allowedFields));
+        
+        $setClauses = [];
+        $params = [];
+        
+        foreach ($updateData as $field => $value) {
+            $setClauses[] = "`$field` = ?";
+            $params[] = $value;
+        }
+        
+        $params[] = $id;
+        
+        $sql = "UPDATE {$this->table} SET " . implode(', ', $setClauses) . " WHERE id = ?";
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute($params);
+        } catch (\PDOException $e) {
+            error_log("Error in updateCourse: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function getDB() {
+        return $this->db;
     }
 
     public function deleteCourse($id) {

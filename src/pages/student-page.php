@@ -10,7 +10,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
 $courseModel = new \App\Model\VideoCourse();
 $categoryModel = new \App\Model\CategoryModel();
 
-// Get search parameters
+
 $search = $_GET['search'] ?? '';
 $view = $_GET['view'] ?? 'all';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -23,7 +23,7 @@ $courses = $courseModel->getCourses($page, $limit, $search);
 $totalCourses = $courseModel->getTotalCourses($search);
 $totalPages = ceil($totalCourses / $limit);
 
-// Fetching categories for filter
+
 $categories = $categoryModel->getAllCategories();
 
 

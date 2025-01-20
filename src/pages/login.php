@@ -32,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 header('Location: ../pages/login.php');   
             }
-                    exit;
+            // $error = 'Your account is not validated yet by the admin!';
+            exit;
             }
           
         $error = 'Invalid credentials';

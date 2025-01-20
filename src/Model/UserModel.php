@@ -3,6 +3,8 @@
 namespace App\Model;
 
 class UserModel extends AbstractModel {
+
+    
     public function authenticate($email, $password) {
         $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);

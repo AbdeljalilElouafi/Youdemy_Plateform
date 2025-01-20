@@ -20,6 +20,14 @@
             </div>
         </div>
 
+
+
+                <?php if ($error): ?>
+                    <div class="bg-red-100 border sm:mx-auto sm:w-full sm:max-w-sm border-red-400 text-red-700 px-6 py-3 rounded relative mb-4">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
         <!-- Login Form -->
         <div id="loginForm" class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="#" method="POST">
