@@ -158,37 +158,7 @@
                     </div>
                 <?php endif; ?>
 
-                <!-- Filters -->
-                <div class="mb-6">
-                    <form method="GET" class="flex gap-4">
-                        <input type="text" 
-                               name="search" 
-                               value="<?php echo htmlspecialchars($search); ?>" 
-                               placeholder="Search courses..." 
-                               class="bg-white border border-gray-300 rounded-lg px-4 py-2">
-                               
-                        <select name="category" class="bg-white border border-gray-300 rounded-lg px-4 py-2">
-                            <option value="">All Categories</option>
-                            <?php foreach ($categories as $category): ?>
-                                <option value="<?php echo $category['id']; ?>" 
-                                    <?php echo $categoryId == $category['id'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($category['name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                               
-                        <select name="status" class="bg-white border border-gray-300 rounded-lg px-4 py-2">
-                            <option value="">All Status</option>
-                            <option value="draft" <?php echo $statusFilter === 'draft' ? 'selected' : ''; ?>>Draft</option>
-                            <option value="published" <?php echo $statusFilter === 'published' ? 'selected' : ''; ?>>Published</option>
-                            <option value="archived" <?php echo $statusFilter === 'archived' ? 'selected' : ''; ?>>Archived</option>
-                        </select>
-                        
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-                            Apply Filters
-                        </button>
-                    </form>
-                </div>
+
 
                 <!-- Courses Table -->
                 <div class="bg-white overflow-auto rounded-lg shadow">
